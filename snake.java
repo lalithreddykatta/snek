@@ -1,19 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.awt.geom.*; // impor the necessary classes for the code
+import java.awt.geom.*; 
 
-public class Snake extends JComponent // exted jcomponent to use the jframe and the like
+public class Snake extends JComponent 
 {
     int x[] = new int [600]; // create an array for the body of the snake, for the x and y values
     int y[] = new int [600];
     int body; // initialize a value for the body length to be defined later
 
-    int randx; // initialize values for the random x and y of the fruit location
-    int randy;
-    int score;
-    boolean gameOn = true; // set a boolean variable for the starting and stopping of the game
-    boolean up; // set boolean variables for the movement in a certain directino
+    boolean up;
     boolean down;
     boolean left;
     boolean right;
@@ -29,13 +25,12 @@ public class Snake extends JComponent // exted jcomponent to use the jframe and 
             y[z] = 500;
         }
 
-        appleLocation (590); // use the method for drawing the apple to place an apple, defined below
         Timer t = new Timer (35,new MoveListener ()); // create a time with the action performed method, defined below
         t.start (); // and start it to make it run
 
     }
 
-    public void paintComponent(Graphics g) // use the paint component method to draw the head and fruit
+    public void paintComponent(Graphics g) // use the paint component method to draw the head 
     {
 
         if (gameOn) // if the game is still on then
@@ -54,64 +49,9 @@ public class Snake extends JComponent // exted jcomponent to use the jframe and 
                 g.fillRect (x[z],y[z],20,20); // draw every extra part
 
             }
-            g.setColor (Color.RED); // change the color
-            g.fillRect (randx, randy, 10, 10); // draw the fruit
 
         }
-        else // if the game has been stopped due to a loss than
-        {
-            String f = "GAME OVER"; // stop drawing the snake and instead draw a game over symbol
-            g.setColor (Color.RED);
-            g.setFont (new Font ("Sans Serif", Font.PLAIN, 35));
-            g.drawString(f, 175, 300);
-
-        }
-    }
-
-    public void appleLocation (int max) // method for giving the apple a location
-    {
-        randx = (int) (Math.random() * max); // use the math random method multiplyed by a maximum number for the x
-        randy = (int) (Math.random() * max); // do the same thing for the y
-        for (int z = 0; z <= body; z++) // use a for loop to check for the length of the body
-        {
-            if (randx == x[z] && randy == y[z]) // and if the x and y value of the body and fruit match later in the body redraw it
-            {
-                randx = (int) (Math.random() * max);
-                randy = (int) (Math.random() * max);
-            }
-        }
-    }
-
-    public void checkFruit () // a method to check if you hit the fruit
-    {
-
-        for (int d = x[0]; d <= x[0] + 20; d++) // check the x value of the head and add twenty due the snake being free moving so that we have to check every x value of the entire head
-        {
-            for (int e = y[0]; e <= y[0] + 20; e++) // same to check every y value of the head when it hits from the left or right
-            {
-                for (int i = randx; i <= randx + 10; i++) // check the fruits x value and add ten to cover the entire x side
-                {
-                    for (int c = randy; c <= randy + 10; c++) // and the same for the y side
-                    {
-                        if ((d == i) && (e == c)) // and if the x and y values intersect 
-                        {
-                            body += 5; // make the body bigger by one 
-                            appleLocation (500); // and redraw the fruit
-                            score++;
-                            for (int r = 0; r < 50; r++)
-                            {
-                                System.out.println();
-                            }
-                            if (score <=1)
-                                System.out.println ("You have gotten " +score+ " apple.");
-                            else
-                                System.out.println ("You have gotten " +score+ " apples.");
-                        }
-                    }
-                }
-            }   
-        }
-
+        
     }
 
     public void checkCollision () // a method to check collisions with the walls or itself
@@ -147,44 +87,43 @@ public class Snake extends JComponent // exted jcomponent to use the jframe and 
 
     }
 
-    public void move (int code1) // method to set the move direction of the snake
+    public void move (int dir) // method to set the move direction of the snake
     {
-        switch(code1)
+        switch(dir)
         {
-            case KeyEvent.VK_W: case KeyEvent.VK_UP:// if the button pressed is up, than set up to true and left and right to false
+            case KeyEvent.VK_W: case KeyEvent.VK_UP:
             if(!down)
             {
-
-                up = true; // down is declared in the conditional statement so that the body cannot be moved back against itself, only forward
+                up = true; 
                 left = false; 
                 right = false; 
             }
             break;
-            case KeyEvent.VK_S: case KeyEvent.VK_DOWN: // if the button pressed is down, than set down to true and left and right to false 
+            case KeyEvent.VK_S: case KeyEvent.VK_DOWN: 
             if(!up)
             {
-                down = true; // up is declared in the conditional statement for the reason above
+                down = true; 
                 left = false;
                 right = false;
             }
             break;
-            case KeyEvent.VK_A: case KeyEvent.VK_LEFT: // if the button pressed is left, than set left to true and up and down to false
+            case KeyEvent.VK_A: case KeyEvent.VK_LEFT: 
             if(!right)
             {
-                up = false; // right is declared in the conditional statement for the reason above
+                up = false; 
                 down = false;
                 left = true;
             }
             break;
-            case KeyEvent.VK_D: case KeyEvent.VK_RIGHT: // if the button pressed is right, than set right to true and up and down to false
+            case KeyEvent.VK_D: case KeyEvent.VK_RIGHT:  
             if(!left)
             {
-                up = false; // left is declared in the conditional statement for the reason above
+                up = false; 
                 down = false;
                 right = true;
             }
             break;
-            case KeyEvent.VK_L:
+            case KeyEvent.VK_H:
             body+=5;
             break;
             case KeyEvent.VK_Q:
@@ -198,11 +137,10 @@ public class Snake extends JComponent // exted jcomponent to use the jframe and 
         {
             if (gameOn) // while the game is on
             {
-                checkFruit (); // check if the fruit has hit
 
                 checkCollision (); // check if the body has collided with itself
                 // and then make it move by...
-                for (int z = body; z > 0; z--) // making eacj value of the head equivalent to the one before it, going down to zero
+                for (int z = body; z > 0; z--) // making each value of the snake equivalent to the one before it
                 {
                     x[z] = x[(z-1)]; // each one is equivalent to the one before it
                     y[z] = y[(z-1)];
