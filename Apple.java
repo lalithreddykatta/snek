@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Apple extends JComponent
 {
-    private int x,y;
+    private int x,y; //must be removed, is probably breaking collisions
     final Color color = Color.red;
     final int size = 10;
     Rectangle apel;
@@ -19,7 +19,7 @@ public class Apple extends JComponent
         y = gen.nextInt(670) + 15;
         apel = new Rectangle(x,y,size,size);
     }
-
+//need new constructor that takes in all data, for use with the load method
     public void paintComponent(Graphics g)
     {
         Graphics2D g2 = (Graphics2D) g;
